@@ -71,8 +71,8 @@ class UserController extends Controller
             }
 
             // Retrieve User
-            $user = User::where('id', $id)
-                ->pluck('name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
+            $user = User::select('name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
+                ->where('id', $id)
                 ->first();
 
             // Validate if user is found

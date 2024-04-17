@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -45,4 +46,26 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+    /**
+     * User has many followings
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function followings(): HasMany
+    {
+        return $this->hasMany(Follow::class, 'follower_id', 'id');
+    }
+
+
+    /**
+     * User has many followers
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function follower(): HasMany
+    {
+        return $this->hasMany(Follow::class, 'writer_id', 'id');
+    }
 }

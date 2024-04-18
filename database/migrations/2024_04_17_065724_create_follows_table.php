@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('follower_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

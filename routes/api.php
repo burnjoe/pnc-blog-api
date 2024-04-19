@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\FollowController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Route::middleware('auth:sanctum')->group(function () {
+
+
 // Get all users
 Route::get('/users', [UserController::class, 'index'])
     ->name('users.index');
@@ -35,4 +38,22 @@ Route::put('/users/{id}/update', [UserController::class, 'update'])
 // Delete specific user
 Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])
     ->name('users.destroy');
+
+
+// Get user followings
+Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
+    ->name('users.following');
+
+// Get user followers
+Route::get('/users/{id}/followers', [UserController::class, 'showFollowers'])
+    ->name('users.followers');
+
+// Follow new writer
+Route::post('/follow/{id}', [FollowController::class, 'store'])
+    ->name('follow');
+
+// Unfollow specific writer
+Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])
+    ->name('unfollow');
+    
 // });

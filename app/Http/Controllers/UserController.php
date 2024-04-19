@@ -80,7 +80,7 @@ class UserController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => "User not found"
-                ], 404);
+                ], 400);
             }
 
             return response()->json([
@@ -168,7 +168,7 @@ class UserController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => "User not found"
-                ], 404);
+                ], 400);
             }
 
             // Update user
@@ -222,7 +222,7 @@ class UserController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => "User not found"
-                ], 404);
+                ], 400);
             }
 
             // Deletes User

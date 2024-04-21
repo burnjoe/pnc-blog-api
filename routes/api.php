@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -40,6 +41,7 @@ Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])
     ->name('users.destroy');
 
 
+
 // Get user followings
 Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
     ->name('users.following');
@@ -56,4 +58,27 @@ Route::post('/follow/{id}', [FollowController::class, 'store'])
 Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])
     ->name('unfollow');
     
+
+
+// Get all posts
+Route::get('/posts', [PostController::class, 'index'])
+    ->name('posts.index');
+
+// Get specific post
+Route::get('/posts/{id}', [PostController::class, 'show'])
+    ->name('posts.show');
+
+// Add new post
+Route::post('/posts/store', [PostController::class, 'store'])
+    ->name('posts.store');
+
+// Edit specific post
+Route::put('/posts/{id}/update', [PostController::class, 'update'])
+    ->name('posts.update');
+
+// Delete specific post
+Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])
+    ->name('posts.destroy');
+
+
 // });

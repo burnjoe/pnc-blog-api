@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug');
             $table->text('description');
-            $table->text('image');
+            $table->text('image')->nullable();
             $table->boolean('status')->default(true);
             $table->foreignId('user_id')
                 ->constrained('users')

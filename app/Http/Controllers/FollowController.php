@@ -17,7 +17,7 @@ class FollowController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function store(Request $request, $id) {
+    public function store($id) {
         try {
             // Validate required id parameter
             if (!isset($id) || empty($id)) {

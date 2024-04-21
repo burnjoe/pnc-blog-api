@@ -37,9 +37,19 @@ class DatabaseSeeder extends Seeder
             'title' => 'Test Post',
             'slug' => 'Test Slug',
             'description' => 'Test Description',
-            'image' => 'Test Image',
+            'image' => null,
             'status' => true,
-            'user_id' => 1,
+            'writer_id' => 1,
+            'category_id' => 1,
+        ]);
+
+        \App\Models\Post::create([
+            'title' => 'Test Post II',
+            'slug' => 'Test Slug II',
+            'description' => 'Test Description II',
+            'image' => null,
+            'status' => true,
+            'writer_id' => 2,
             'category_id' => 1,
         ]);
     }

@@ -27,5 +27,20 @@ class DatabaseSeeder extends Seeder
             'account_type' => 'Writer',
             'provider' => 'Jderl',
         ]);
+
+
+        \App\Models\Category::create([
+            'name' => 'Test Category'
+        ]);
+
+        \App\Models\Post::create([
+            'title' => 'Test Post',
+            'slug' => 'Test Slug',
+            'description' => 'Test Description',
+            'image' => 'Test Image',
+            'status' => true,
+            'user_id' => 1,
+            'category_id' => 1,
+        ]);
     }
 }

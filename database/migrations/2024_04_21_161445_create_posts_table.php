@@ -18,7 +18,7 @@ return new class extends Migration
             $table->text('description');
             $table->text('image')->nullable();
             $table->boolean('status')->default(true);
-            $table->foreignId('user_id')
+            $table->foreignId('writer_id')
                 ->constrained('users')
                 ->cascadeOnDelete();
             $table->foreignId('category_id')

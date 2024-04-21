@@ -21,7 +21,7 @@ class Post extends Model
         'description',
         'image',
         'status',
-        'user_id',
+        'writer_id',
         'category_id',
     ];
 
@@ -34,5 +34,16 @@ class Post extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+
+    /**
+     * Post belongs to user
+     * 
+     * @return Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function writer(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'writer_id', 'id');
     }
 }

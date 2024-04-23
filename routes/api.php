@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\FollowController;
-use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -44,7 +43,6 @@ Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])
     ->name('users.destroy');
 
 
-
 // Get user followings
 Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
     ->name('users.following');
@@ -84,5 +82,6 @@ Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])
     ->name('posts.destroy');
 
 
+// });
 
 require __DIR__.'/auth.php';

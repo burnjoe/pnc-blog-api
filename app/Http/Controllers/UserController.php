@@ -16,10 +16,11 @@ class UserController extends Controller
      */
     public function rules()
     {
+        // TODO: Do not require image upon creation
         return [
             'name' => 'required|string|min:2|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'image' => 'file|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            'email' => 'required|email|min:5|max:255|unique:users',
+            // 'image' => 'file|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'password' => ['required', 'string', 'min:8', 'confirmed', new StrongPassword],
             'account_type' => 'required|string|in:Writer',
             'provider' => 'required|string|min:2|max:255'

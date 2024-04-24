@@ -17,7 +17,7 @@ class ResetController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function ResetPassword(ResetRequest $request)
+    public function resetPassword(ResetRequest $request)
     {
         $email = $request->email;
         $token = $request->token;

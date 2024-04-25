@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Rules\StrongPassword;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
 class RegisterRequest extends FormRequest
@@ -31,5 +32,27 @@ class RegisterRequest extends FormRequest
             'account_type' => 'required|string|in:Writer',
             'provider' => 'required|string|min:2|max:255'
         ];
+    }
+
+    /**
+     * Handle a failed validation attempt.
+     * 
+     * @param \Illuminate\Contracts\Validation\Validator $validator
+     * 
+     * @return void
+     * 
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        $errors = $validator->errors()->all();
+
+        throw new \Illuminate\Validation\ValidationException(
+            $validator,
+            response()->json([
+                'success' => false,
+                'message' => $errors,
+            ], 422)
+        );
     }
 }

@@ -123,7 +123,7 @@ class UserController extends Controller
             // Validation errors
             return response()->json([
                 'success' => false,
-                'message' => $e->validator->errors()
+                'message' => $e->validator->errors()->all()
             ], 422);
         } catch (\Throwable $th) {
             // Server error
@@ -185,7 +185,7 @@ class UserController extends Controller
             // Validation errors
             return response()->json([
                 'success' => false,
-                'message' => $e->validator->errors()
+                'message' => $e->validator->errors()->all()
             ], 422);
         } catch (\Throwable $th) {
             // Server error

@@ -10,10 +10,9 @@ This API serves as the backend for the PNC blog site. It provides various endpoi
 Make sure you have installed the following:
 - [Visual Studio Code](https://code.visualstudio.com/download)
 - [XAMPP](https://www.apachefriends.org/download.html)
-- [NodeJS](https://nodejs.org/en/download/)
 - [Composer](https://getcomposer.org/download/)
 - [Git](https://git-scm.com/downloads)
-- [GitHub Desktop](https://desktop.github.com/) (Optional)
+- [GitHub Desktop *(Optional)*](https://desktop.github.com/)
 
 ## 🔧 Getting Started
 ### Starting XAMPP Server
@@ -94,6 +93,30 @@ Run the seeder
 php artisan db:seed
 ```
 
+Generate encryption key to generate secure access tokens. [See Laravel Passport](https://laravel.com/docs/10.x/passport#installation).
+```
+php artisan passport:install
+```
+
+When prompted to run pending database migration, type `yes`
+```
+Would you like to run all pending database migrations? (yes/no) [yes]:
+> yes
+```
+
+When prompted to create clients, type `yes`
+```
+Would you like to create the "personal access" and "password grant" clients? (yes/no) [yes]:
+> yes
+```
+
+After installing passport, copy the generated `Client ID` and `Client Secret` to the newly created variables in `.env` file
+```dotenv
+PASSPORT_PERSONAL_ACCESS_CLIENT_ID = "1"
+PASSPORT_PERSONAL_ACCESS_CLIENT_SECRET = "Hl0rRWjgKact31fjZupAMK0E7HwksWN2MhrznmL8"
+```
+
+
 ## ⚡ Running the Server
 
 #### Enter these following commands to your terminal:
@@ -104,4 +127,4 @@ php artisan serve
 ```
 
 
-### ✨ You can now access the server at http://localhost:8000
+### ✨ You can now test API endpoints with http://localhost:8000/api/{endpoint}

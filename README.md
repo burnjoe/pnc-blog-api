@@ -58,54 +58,54 @@ https://github.com/burnjoe/pnc-blog-api.git
 #### Open Visual Studio Code terminal *(Ctrl + `)* and enter the following commands:
 
 Install composer to the project
-```
+```cmd
 composer install
 ```
 
 Install npm to the project
-```
+```cmd
 npm install
 ```
 
 Create .env 
-```
+```cmd
 copy .env.example .env
 ```
 
 Generate new app key
-```
+```cmd
 php artisan key:generate
 ```
 
 Run the migration
-```
+```cmd
 php artisan migrate
 ```
 
 When prompted to create the database, type `yes`
-```
+```cmd
 Would you like to create it? (yes/no) [no]
 > yes
 ```
 
 Run the seeder
-```
+```cmd
 php artisan db:seed
 ```
 
 Generate encryption key to generate secure access tokens. [See Laravel Passport](https://laravel.com/docs/10.x/passport#installation).
-```
+```cmd
 php artisan passport:install
 ```
 
 When prompted to run pending database migration, type `yes`
-```
+```cmd
 Would you like to run all pending database migrations? (yes/no) [yes]:
 > yes
 ```
 
 When prompted to create clients, type `yes`
-```
+```cmd
 Would you like to create the "personal access" and "password grant" clients? (yes/no) [yes]:
 > yes
 ```

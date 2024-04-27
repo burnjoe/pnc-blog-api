@@ -28,7 +28,7 @@ class RegisterRequest extends FormRequest
             'email' => 'required|email|min:5|max:255|unique:users',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'password' => ['required', 'string', 'min:8', 'confirmed', new StrongPassword],
-            'account_type' => 'required|string|in:Writer',
+            'account_type' => 'required|string|in:Writer,Administrator',
             'provider' => 'required|string|min:2|max:255'
         ];
     }

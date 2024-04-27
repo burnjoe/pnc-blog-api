@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Rules\StrongPassword;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
@@ -21,7 +22,7 @@ class UserController extends Controller
             'email' => 'required|email|min:5|max:255|unique:users',
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'password' => ['required', 'string', 'min:8', 'confirmed', new StrongPassword],
-            'account_type' => 'required|string|in:Writer',
+            'account_type' => 'required|string|in:Writer,Administrator',
             'provider' => 'required|string|min:2|max:255'
         ];
     }
@@ -111,6 +112,11 @@ class UserController extends Controller
             // Request validations
             $validated_data = $request->validate($this->rules());
 
+            // Store image in storage/app/public/profiles if has input 'image'
+            if ($request->hasFile('image')) {
+                $validated_data['image'] = $request->file('image')->store('profiles', 'public');
+            }
+
             // Create user
             $user = User::create($validated_data);
 
@@ -157,9 +163,10 @@ class UserController extends Controller
             // Retrieve user
             $user = User::find($id);
 
-            // Modify email rules
+            // Modify email & password rules
             $rules = $this->rules();
             $rules['email'] = "required|string|email|max:255|unique:users,email,$user->id";
+            unset($rules['password']);
 
             // Request validations
             $validated_data = $request->validate($rules);
@@ -170,6 +177,17 @@ class UserController extends Controller
                     'success' => false,
                     'message' => "User not found"
                 ], 400);
+            }
+
+            // Store image in storage/app/public/images if has input 'image'
+            if ($request->hasFile('image')) {
+                // Delete current image if there is
+                if ($user->image) {
+                    Storage::disk('public')->delete($user->image);
+                }
+
+                // Store new image
+                $validated_data['image'] = $request->file('image')->store('profiles', 'public');
             }
 
             // Update user
@@ -225,6 +243,11 @@ class UserController extends Controller
                     'success' => false,
                     'message' => "User not found"
                 ], 400);
+            }
+
+            // Delete user image if there is
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
             }
 
             // Deletes User

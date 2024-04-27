@@ -40,7 +40,7 @@ class Kernel extends HttpKernel
 
         'api' => [
             // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
-            \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
+            \Illuminate\Routing\Middleware\ThrottleRequests::class . ':api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
     ];
@@ -61,8 +61,28 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'password.confirm' => \Illuminate\Auth\Middleware\RequirePassword::class,
         'precognitive' => \Illuminate\Foundation\Http\Middleware\HandlePrecognitiveRequests::class,
+        'role.admin' => \App\Http\Middleware\PermissionAdmin::class,
+        'role.writer' => \App\Http\Middleware\PermissionWriter::class,
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
     ];
+
+
+    /**
+     * Resolve the middleware name to a class name.
+     *
+     * @param  string  $middleware
+     * @return string
+     */
+    protected function resolveMiddlewareClassName($middleware)
+    {
+        if (str_contains($middleware, ':')) {
+            $segments = explode(':', $middleware);
+            $class = app()->make($segments[0]);
+            return $class . ':' . $segments[1];
+        }
+
+        return parent::resolveMiddlewareClassName($middleware);
+    }
 }

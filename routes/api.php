@@ -20,59 +20,59 @@ use Illuminate\Support\Facades\Route;
 
 // ============================== Authenticated Users ==============================
 Route::middleware(['auth:api'])->group(function () {
-    // ============================== Users ==============================
+    // Admin Routes
+    Route::middleware(['role.admin'])->group(function () {
+        // Get all users
+        Route::get('/users', [UserController::class, 'index'])
+            ->name('users.index');
 
-    // Get all users
-    Route::get('/users', [UserController::class, 'index'])
-        ->name('users.index');
+        // Get specific user
+        Route::get('/users/{id}', [UserController::class, 'show'])
+            ->name('users.show');
 
-    // Get specific user
-    Route::get('/users/{id}', [UserController::class, 'show'])
-        ->name('users.show');
+        // Add new user
+        Route::post('/users/store', [UserController::class, 'store'])
+            ->name('users.store');
 
-    // Add new user
-    Route::post('/users/store', [UserController::class, 'store'])
-        ->name('users.store');
+        // Edit specific user
+        Route::put('/users/{id}/update', [UserController::class, 'update'])
+            ->name('users.update');
 
-    // Edit specific user
-    Route::put('/users/{id}/update', [UserController::class, 'update'])
-        ->name('users.update');
-
-    // Delete specific user
-    Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])
-        ->name('users.destroy');
-
-
-    // ============================== Posts ==============================
-
-    // Add new post
-    Route::post('/posts/store', [PostController::class, 'store'])
-        ->name('posts.store');
-
-    // Edit specific post
-    Route::put('/posts/{id}/update', [PostController::class, 'update'])
-        ->name('posts.update');
-
-    // Delete specific post
-    Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])
-        ->name('posts.destroy');
+        // Delete specific user
+        Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])
+            ->name('users.destroy');
+    });
 
 
-    // ============================== Follows ==============================
 
-    // Follow new writer
-    Route::post('/follow/{id}', [FollowController::class, 'follow'])
-        ->name('follow');
+    // Writer Routes
+    Route::middleware(['role.writer'])->group(function () {
+        // Add new post
+        Route::post('/posts/store', [PostController::class, 'store'])
+            ->name('posts.store');
 
-    // Unfollow specific writer
-    Route::delete('/unfollow/{id}', [FollowController::class, 'unfollow'])
-        ->name('unfollow');
+        // Edit specific post
+        Route::put('/posts/{id}/update', [PostController::class, 'update'])
+            ->name('posts.update');
+
+        // Delete specific post
+        Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])
+            ->name('posts.destroy');
+
+
+
+        // Follow new writer
+        Route::post('/follow/{id}', [FollowController::class, 'follow'])
+            ->name('follow');
+
+        // Unfollow specific writer
+        Route::delete('/unfollow/{id}', [FollowController::class, 'unfollow'])
+            ->name('unfollow');
+    });
 });
 
 
-// ============================== Guests ==============================
-// ============================== Follows ==============================
-
+// Guest Routes
 // Get user followings
 Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
     ->name('users.following');
@@ -81,7 +81,7 @@ Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
 Route::get('/users/{id}/followers', [UserController::class, 'showFollowers'])
     ->name('users.followers');
 
-// ============================== Posts ==============================
+
 
 // Get all posts
 Route::get('/posts', [PostController::class, 'index'])
@@ -91,6 +91,7 @@ Route::get('/posts', [PostController::class, 'index'])
 Route::get('/posts/{id}', [PostController::class, 'show'])
     ->name('posts.show');
 
+    
 
 // Include authentication routes
 require __DIR__ . '/auth.php';

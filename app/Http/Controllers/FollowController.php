@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Follow;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class FollowController extends Controller
@@ -35,15 +36,14 @@ class FollowController extends Controller
                 ], 400);
             }
 
-            // TODO: Replace 1 with $this->auth()
             // Validate equality of current user's id and request's id
-            if ($id === 1) {
+            if ($id == Auth::id()) {
                 return response()->json([
                     'success' => false,
                     'message' => "Invalid follow request"
                 ], 400);
             }
-
+            
             // Validate if id exists in users
             if (!User::where('id', $id)->exists()) {
                 return response()->json([
@@ -52,20 +52,18 @@ class FollowController extends Controller
                 ], 400);
             }
             
-            // TODO: Replace 1 with $this->auth()
             // Validate if auth() still not follows user with $id
-            if (Follow::where('writer_id', $id)->where('follower_id', 1)->exists()) {
+            if (Follow::where('writer_id', $id)->where('follower_id', Auth::id())->exists()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'You are already following this user'
                 ], 400);
             }
             
-            // TODO: Replace follower_id value with $this->auth()
             // Create Follow / Follow User
             $follow = Follow::create([
-                'writer_id' => $id,
-                'follower_id' => 1
+                'writer_id' => (int) $id,
+                'follower_id' => Auth::id()
             ]);
 
             unset($follow['id']);
@@ -102,18 +100,16 @@ class FollowController extends Controller
                 ], 400);
             }
 
-            // TODO: Replace 1 with $this->auth()
             // Validate equality of current user's id and request's id
-            if ($id == 1) {
+            if ($id == Auth::id()) {
                 return response()->json([
                     'success' => false,
                     'message' => "Invalid unfollow request"
                 ], 400);
             }
 
-            // TODO: Replace find() value with $this->auth()
             // Eager load user with followings
-            $following = User::find(1)
+            $following = User::find(Auth::id())
                 ->followings()
                 ->where('writer_id', $id)
                 ->take(1);
@@ -131,7 +127,6 @@ class FollowController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $following,
                 'message' => 'User unfollowed successfully'
             ]);
         } catch (\Throwable $th) {

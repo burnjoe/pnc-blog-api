@@ -56,6 +56,17 @@ Route::middleware(['auth:api'])->group(function () {
     // Delete specific post
     Route::delete('/posts/{id}/destroy', [PostController::class, 'destroy'])
         ->name('posts.destroy');
+
+
+    // ============================== Follows ==============================
+
+    // Follow new writer
+    Route::post('/follow/{id}', [FollowController::class, 'store'])
+        ->name('follow');
+
+    // Unfollow specific writer
+    Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])
+        ->name('unfollow');
 });
 
 
@@ -69,15 +80,6 @@ Route::get('/users/{id}/following', [UserController::class, 'showFollowing'])
 // Get user followers
 Route::get('/users/{id}/followers', [UserController::class, 'showFollowers'])
     ->name('users.followers');
-
-// Follow new writer
-Route::post('/follow/{id}', [FollowController::class, 'store'])
-    ->name('follow');
-
-// Unfollow specific writer
-Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])
-    ->name('unfollow');
-
 
 // ============================== Posts ==============================
 

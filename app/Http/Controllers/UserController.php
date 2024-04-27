@@ -203,6 +203,7 @@ class UserController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
+    // TODO: If user to delete is the authenticated user: confirm, logout, delete
     public function destroy($id)
     {
         try {

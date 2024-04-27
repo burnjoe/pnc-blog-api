@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
@@ -23,7 +25,7 @@ class PostController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',    // 2MB
             'status' => 'required|boolean',
             'writer_id' => 'required|exists:users,id',
-            'category_id' => 'required',
+            'category_id' => 'required|exists:categories,id',
         ];
     }
 
@@ -108,8 +110,16 @@ class PostController extends Controller
     public function store(Request $request)
     {
         try {
+            // Assign authenticated user as the writer of the post
+            $request->merge(['writer_id' => Auth::id()]);
+
             // Request validations
             $validated_data = $request->validate($this->rules());
+
+            // Store image in storage/app/public/images if has input 'image'
+            if ($request->hasFile('image')) {
+                $validated_data['image'] = $request->file('image')->store('images', 'public');
+            }
 
             // Create post
             $post = Post::create($validated_data);
@@ -125,6 +135,129 @@ class PostController extends Controller
                 'success' => false,
                 'message' => $e->validator->errors()
             ], 422);
+        } catch (\Throwable $th) {
+            // Server error
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal server error'
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Update specific post
+     * 
+     * @param Request $request
+     * @param int $id
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function update(Request $request, $id)
+    {
+        try {
+            // Validate if id is numeric
+            if (!is_numeric($id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid id type'
+                ], 400);
+            }
+
+            // Assign authenticated user as the writer of the post
+            $request->merge(['writer_id' => Auth::id()]);
+
+            // Request validations
+            $validated_data = $request->validate($this->rules());
+
+            // Retrieve post
+            $post = Post::find($id);
+
+            // Validate if post is found
+            if ($post === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Post not found"
+                ], 400);
+            }
+
+            // Store image in storage/app/public/images if has input 'image'
+            if ($request->hasFile('image')) {
+                // Delete current image if there is
+                if ($post->image) {
+                    Storage::disk('public')->delete($post->image);
+                }
+
+                // Store new image
+                $validated_data['image'] = $request->file('image')->store('images', 'public');
+            }
+
+            // Update post
+            $post->update($validated_data);
+            $post = $post->fresh();
+
+            return response()->json([
+                'success' => true,
+                'data' => $post,
+                'message' => 'Post updated successfully'
+            ]);
+        } catch (ValidationException $e) {
+            // Validation errors
+            return response()->json([
+                'success' => false,
+                'message' => $e->validator->errors()->all()
+            ], 422);
+        } catch (\Throwable $th) {
+            // Server error
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal server error'
+            ], 500);
+        }
+    }
+
+
+    /**
+     * Delete specific post
+     * 
+     * @param $id
+     * 
+     * @return Illuminate\Http\JsonResponse
+     */
+    public function destroy($id)
+    {
+        try {
+            // Validate if id is numeric
+            if (!is_numeric($id)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Invalid id type'
+                ], 400);
+            }
+
+            // Retrieve post
+            $post = Post::find($id);
+
+            // Validate if post is found
+            if ($post === null) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Post not found"
+                ], 400);
+            }
+
+            // Delete post image if there is
+            if ($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+
+            // Delete Post
+            $post = $post->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post deleted successfully'
+            ]);
         } catch (\Throwable $th) {
             // Server error
             return response()->json([

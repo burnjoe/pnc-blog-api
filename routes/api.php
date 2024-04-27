@@ -61,11 +61,11 @@ Route::middleware(['auth:api'])->group(function () {
     // ============================== Follows ==============================
 
     // Follow new writer
-    Route::post('/follow/{id}', [FollowController::class, 'store'])
+    Route::post('/follow/{id}', [FollowController::class, 'follow'])
         ->name('follow');
 
     // Unfollow specific writer
-    Route::delete('/unfollow/{id}', [FollowController::class, 'destroy'])
+    Route::delete('/unfollow/{id}', [FollowController::class, 'unfollow'])
         ->name('unfollow');
 });
 

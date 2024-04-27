@@ -18,7 +18,7 @@ class FollowController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function store($id) {
+    public function follow($id) {
         try {
             // Validate required id parameter
             if (!isset($id) || empty($id)) {
@@ -90,7 +90,7 @@ class FollowController extends Controller
      * 
      * @return Illuminate\Http\JsonResponse
      */
-    public function destroy($id) {
+    public function unfollow($id) {
         try {
             // Validate if id is numeric
             if (!is_numeric($id)) {

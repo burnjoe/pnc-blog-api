@@ -72,6 +72,7 @@ class UserController extends Controller
 
             // Retrieve User
             $user = User::select('id', 'name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
+                ->with(['posts', 'posts.category'])
                 ->where('id', $id)
                 ->first();
 

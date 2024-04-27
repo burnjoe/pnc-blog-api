@@ -181,6 +181,14 @@ class PostController extends Controller
                 ], 400);
             }
 
+            // Check if authenticated user is the owner of the post
+            if ($post->writer->id !== Auth::id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Forbidden'
+                ], 403);
+            }
+
             // Store image in storage/app/public/images if has input 'image'
             if ($request->hasFile('image')) {
                 // Delete current image if there is
@@ -244,6 +252,14 @@ class PostController extends Controller
                     'success' => false,
                     'message' => "Post not found"
                 ], 400);
+            }
+
+            // Check if authenticated user is the owner of the post
+            if ($post->writer->id !== Auth::id()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Forbidden'
+                ], 403);
             }
 
             // Delete post image if there is

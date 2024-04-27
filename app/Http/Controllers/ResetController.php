@@ -42,7 +42,7 @@ class ResetController extends Controller
         DB::table('password_reset_tokens')->where('email', $email)->delete();
         
         return response([
-            'success' => false,
+            'success' => true,
             'message' => 'Reset password successfully'
         ]);
     }

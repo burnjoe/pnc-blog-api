@@ -16,11 +16,10 @@ class UserController extends Controller
      */
     public function rules()
     {
-        // TODO: Do not require image upon creation
         return [
             'name' => 'required|string|min:2|max:255',
             'email' => 'required|email|min:5|max:255|unique:users',
-            // 'image' => 'file|image|mimes:jpeg,png,jpg|max:2048', // 2MB
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048', // 2MB
             'password' => ['required', 'string', 'min:8', 'confirmed', new StrongPassword],
             'account_type' => 'required|string|in:Writer',
             'provider' => 'required|string|min:2|max:255'
@@ -37,7 +36,7 @@ class UserController extends Controller
     {
         try {
             // Retrieve All Users
-            $user = User::select('name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
+            $user = User::select('id', 'name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
                 ->get();
 
             return response()->json([
@@ -72,7 +71,7 @@ class UserController extends Controller
             }
 
             // Retrieve User
-            $user = User::select('name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
+            $user = User::select('id', 'name', 'email', 'image', 'account_type', 'provider', 'email_verified_at', 'created_at', 'updated_at')
                 ->where('id', $id)
                 ->first();
 
@@ -231,7 +230,6 @@ class UserController extends Controller
 
             return response()->json([
                 'success' => true,
-                'data' => $user,
                 'message' => 'User deleted successfully'
             ]);
         } catch (\Throwable $th) {

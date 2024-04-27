@@ -20,9 +20,9 @@ class PostController extends Controller
             'title' => 'required|string|min:2|max:255',
             'slug' => 'required|string',
             'description' => 'required',
-            'image' => 'file|image|mimes:jpeg,png,jpg|max:2048',    // 2MB
+            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',    // 2MB
             'status' => 'required|boolean',
-            'writer_id' => 'required|exists',
+            'writer_id' => 'required|exists:users,id',
             'category_id' => 'required',
         ];
     }
